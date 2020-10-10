@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    <head>
+        <title>Lsd Tolerance Calculator Pro</title>
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/png" href="eye.png">
+
+        <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+        <link rel="stylesheet" href="node_modules/chart.js/dist/Chart.min.css">
+        <link rel="stylesheet" href="style.css">
+
+        <script src="node_modules/jquery/dist/jquery.min.js"></script>
+        <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="node_modules/chart.js/dist/Chart.min.js"></script>
+        <script src="calc.js"></script>
+        <script src="inputHandler.js"></script>
+    </head>
+
+    <body>
+        <div id="alert-only-numbers" class="alert alert-danger fixed-top" role="alert">
+            Only positive numbers are allowed eg. 500
+        </div>
+        <div id="alert-only-days" class="alert alert-danger fixed-top" role="alert">
+            Only up to 12 days (range 1-12 days)
+        </div>
+        <div id="alert-only-number-desired-dose" class="alert alert-danger fixed-top" role="alert">
+            desired dose has to be a number
+        </div>
+
+
+        <nav class="navbar navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">
+                <img src="eye.png" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
+                LSD Calculator
+            </a>
+        </nav>
+
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-4 text-center">LSD Tolerance Calculator Pro</h1>
+                <img src="eye.png" class="rounded mx-auto d-block">
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+
+                <div class="col">
+                    <canvas id="lineChart"></canvas>
+                </div>
+
+                <div class="col">
+                    <div class="list-group" id="list">
+
+                        <a class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">Add Dose</h5>
+                            </div>
+                            
+                            <div class="form-inline">
+                                <div class="input-group mx-sm-3 mb-2">
+                                    <input type="text" class="form-control" id="inputDose" placeholder="Dose" aria-label="Dose" aria-describedby="basic-addon2">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" id="basic-addon2">µg</span>
+                                    </div>
+                                </div>
+
+                                <div class="input-group mx-sm-3 mb-2">
+                                    <input class="form-control" id="inputDays" placeholder="Days Since Dose (1-12)" aria-label="Days Since Dose (1-12)" aria-describedby="basic-addon2">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" id="basic-addon2">Days</span>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary mb-2" onclick="addDose($('#inputDose'), $('#inputDays'))">Add</button>
+                            </div>
+                        </a>
+
+                        <a class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">Desired Dose</h5>
+                            </div>
+                            
+                            <div class="input-group mx-sm-3 mb-2">
+                                <input type="text" class="form-control" id="inputDesiredDose" placeholder="Desired Dose" aria-label="Desired Dose" aria-describedby="basic-addon2" oninput="calculate()">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="basic-addon2">µg</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <script>
+            //line
+            var ctxL = document.getElementById("lineChart").getContext('2d');
+            var lineChart = new Chart(ctxL, {
+                type: 'line',
+                data: {
+                    labels: ['Today', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+                    datasets: [{
+                        label: "Dose To Take",
+                        data: [],
+                        backgroundColor: [
+                            'rgba(100, 100, 150, .2)',
+                        ],
+                        borderColor: [
+                            'rgba(120, 100, 255, .7)',
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        xAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Days from Today'
+                            }
+                        }],
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Dosage to take (in µg)'
+                            }
+                        }]
+                    }
+                }
+            });
+
+            
+            //hide alerts
+            $('#alert-only-numbers').hide();
+            $('#alert-only-days').hide();
+            $('#alert-only-number-desired-dose').hide();
+        </script>
+    </body>
+</html>
